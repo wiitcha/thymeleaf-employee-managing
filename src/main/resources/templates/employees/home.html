@@ -20,19 +20,26 @@
             padding: 5px 20px;
         }
 
+        .filter {
+            height:  30px;
+            margin: 0;
+        }
+
     </style>
 </head>
 
 <body>
 
 <div class="header">
-
+<h2 CLASS="text-center my-2">-- STORE STAFF --</h2>
 </div>
 <div class="container">
     <form method="get" th:action="@{/employees(page=1, size=2)}" th:object="${search}">
         <div class="form-group">
-            <input type="text" name="search" placeholder="Search">
-            <input type="submit">
+            <input type="text" name="search" class="filter" placeholder="Search">
+            <button type="submit" class="btn btn-primary sm-3">
+                <span class="fa fa-search"></span>
+            </button>
         </div>
     </form>
 
@@ -63,7 +70,7 @@
         <li class="page-item"
             th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
             th:each="p : ${numOfPages}"> <!-- TODO -->
-            <a class="page-link" th:text="${p}" th:href="${urlBuilder.replaceQueryParam('page', ${p}).toUriString()} "></a>
+            <a class="page-link font-weight-bold" th:text="${p}" th:href="${urlBuilder.replaceQueryParam('page', p).toUriString()} "></a>
            <!-- <a class="page-link" th:text="${page}" th:href="@{'/employees?page=' + ${page} + '&size=1'}"></a> -->
         </li>
     </ul>

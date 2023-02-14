@@ -1,8 +1,6 @@
 package com.emir.securitydemo.controller;
 
-import com.emir.securitydemo.model.Role;
 import com.emir.securitydemo.repository.EmployeeRepository;
-import com.emir.securitydemo.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,18 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
-
-    private EmployeeService employeeService;
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
-        this.employeeService = employeeService;
+    public EmployeeController(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
     }
 
@@ -41,16 +35,21 @@ public class EmployeeController {
 
         Pageable pageable = PageRequest.of(page-1, size);
 
+        employeeRepository.count();
+
         if (searchParameter.isEmpty()) {
-            numberOfEmployees = employeeRepository.findAll().size();
+            numberOfEmployees = (int) employeeRepository.count();
             model.addAttribute("employees", employeeRepository.findAll(pageable));
         } else {
             numberOfEmployees = employeeRepository.findFilteredEmployees(searchParameter, pageable).getSize();
             model.addAttribute("employees", employeeRepository.findFilteredEmployees(searchParameter, pageable));
         }
 
-        if (numberOfEmployees % size == 0)  numberOfPages =  numberOfEmployees / size;
-        else numberOfPages = (numberOfEmployees / size) + 1;
+        if (numberOfEmployees % size == 0) {
+            numberOfPages =  numberOfEmployees / size;
+        } else {
+            numberOfPages = (numberOfEmployees / size) + 1;
+        }
 
         for (int i = 1; i <= numberOfPages; i++) {
             pages.add(i);
