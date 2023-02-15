@@ -35,16 +35,11 @@ public class LoginController {
 	public String welcome() {
 		return "login/login-page";
 	}
-	
-//	@GetMapping
-//	public String erroPage() {
-//		return "/login/login-page?error=true";	}
 
 	@GetMapping("/register")
 	public String register() {
 		return "login/registerForm";
 	}
-
 
 	@PostMapping ("/registerCheck")
 	public String registerCheck(@ModelAttribute("employee") EmployeeDTO employeeDTO) {

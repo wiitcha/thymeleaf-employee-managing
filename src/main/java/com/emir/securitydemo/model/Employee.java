@@ -42,7 +42,7 @@ public class Employee {
 	@Column(name="surname")
 	private String surname;
 	
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(
 			name = "employee_role",
 			joinColumns = @JoinColumn(name="id_employee"),

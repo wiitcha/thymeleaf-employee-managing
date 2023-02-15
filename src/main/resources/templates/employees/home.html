@@ -34,10 +34,10 @@
 <h2 CLASS="text-center my-2">-- STORE STAFF --</h2>
 </div>
 <div class="container">
-    <form method="get" th:action="@{/employees}" th:object="${search}">
+    <form method="post" th:action="@{/employees/filter}" th:object="${search}">
         <div class="form-group">
-            <input type="text" th:value="${param.search}" name="search" class="filter" placeholder="Search">
-            <button type="submit" class="btn btn-primary sm-3">
+            <input type="text" name="search" class="filter" placeholder="Search">
+            <button type="submit"  class="btn btn-primary sm-3" onclick="window.location.replace('localhost:8080/employees')">
                 <span class="fa fa-search"></span>
             </button>
         </div>
@@ -62,7 +62,7 @@
             <td sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_MANAGER')">  <!-- TODO -->
                 <a class="btn btn-info px-4"><span class="fa fa-search" aria-hidden="true" title="View details"></span></a>
                 <a class="btn btn-primary px-4"><span class="fa fa-pencil" aria-hidden="true" title="Edit employee"></span></a>
-                <a class="btn btn-danger px-4" style=><span class="fa fa-ban" aria-hidden="true" title="Fire employee"></span></a>
+                <a class="btn btn-danger px-4" th:href="@{/employees/delete(id=${emp.id})}"><span class="fa fa-ban" aria-hidden="true" title="Fire employee"></span></a>
             </td>
         </tbody>
     </table>
@@ -70,7 +70,7 @@
         <li class="page-item"
             th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}"
             th:each="p : ${numOfPages}">
-            <a class="page-link font-weight-bold" th:text="${p}" th:href="${urlBuilder.replaceQueryParam('page', p).toUriString()} "></a>
+            <a class="page-link font-weight-bold" th:text="${p}" th:href="${urlBuilder.replaceQueryParam('page', p).toUriString()}"></a>
         </li>
     </ul>
 </div>

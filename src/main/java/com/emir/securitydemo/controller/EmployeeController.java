@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +28,7 @@ public class EmployeeController {
     public String home(Model model,
                        @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
                        @RequestParam(value = "size", required = false, defaultValue = "2") Integer size,
-                       @RequestParam(value = "search", required = false, defaultValue = "") String searchParameter) {
+                       @RequestParam(value = "search", required = false) String searchParameter) {
 
         List<Integer> pages = new ArrayList<>();
         int numberOfEmployees;
@@ -35,9 +36,7 @@ public class EmployeeController {
 
         Pageable pageable = PageRequest.of(page-1, size);
 
-        employeeRepository.count();
-
-        if (searchParameter.equals("")) {
+        if (searchParameter == null) {
             numberOfEmployees = (int) employeeRepository.count();
             model.addAttribute("employees", employeeRepository.findAll(pageable));
         } else {
@@ -57,11 +56,24 @@ public class EmployeeController {
 
         model.addAttribute("numOfPages", pages);
 
-
-
-
-
         return "employees/home";
     }
+
+    @GetMapping("/delete")
+    public String deleteEmployee(@RequestParam(value = "id") Long id) {
+        employeeRepository.deleteById(id);
+        return "redirect:/employees";
+    }
+
+    @PostMapping("/filter")
+    public String filterEmployees(@RequestParam(value = "search", required = false) String searchParameter) {
+
+        if (searchParameter.equals("")) {
+            return "redirect:/employees";
+        } else {
+            return "redirect:/employees?search=" + searchParameter;
+        }
+    }
+
 
 }
