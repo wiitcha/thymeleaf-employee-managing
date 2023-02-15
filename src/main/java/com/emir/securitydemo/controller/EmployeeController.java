@@ -37,11 +37,11 @@ public class EmployeeController {
 
         employeeRepository.count();
 
-        if (searchParameter.isEmpty()) {
+        if (searchParameter.equals("")) {
             numberOfEmployees = (int) employeeRepository.count();
             model.addAttribute("employees", employeeRepository.findAll(pageable));
         } else {
-            numberOfEmployees = employeeRepository.findFilteredEmployees(searchParameter, pageable).getSize();
+            numberOfEmployees = (int) employeeRepository.findFilteredEmployees(searchParameter, pageable).getTotalElements();
             model.addAttribute("employees", employeeRepository.findFilteredEmployees(searchParameter, pageable));
         }
 
